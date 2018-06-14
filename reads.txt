@@ -1,0 +1,12 @@
+https://www.google.com/search?client=firefox-b-ab&biw=1920&bih=1011&ei=m_oaW8vlJoap6AT71qaoBg&q=nixos+networking+on+laptop&oq=nixos+networking+on+laptop&gs_l=psy-ab.3..33i160k1.8114.13231.0.13418.26.26.0.0.0.0.101.1533.25j1.26.0....0...1.1.64.psy-ab..0.24.1417...0j0i67k1j0i22i30k1j33i21k1j33i22i29i30k1.0.jRIkJmWk8hk
+
+https://ariya.io/2016/06/isolated-development-environment-using-nix
+
+## networkmanager
+https://gist.github.com/AcouBass/4f5bcb3410f14bd5063a718b1d53bc4c
+
+## modularize configuration.nix
+https://nixos.org/nix-dev/2017-March/022945.html
+
+## probably a good one to look at
+https://github.com/cstrahan/nixos-config
