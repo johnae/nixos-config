@@ -47,9 +47,13 @@ in
   time.timeZone = "Europe/Stockholm";
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.packageOverrides = pkgs:
-    { gnupg = pkgs.gnupg.override { pinentry = pkgs.pinentry_gnome; };
-  };
+
+  # this would force all packages that depend on gnupg somehow to be built from source
+  # those include gpgme <- libreoffice and the libreoffice build isn't a fun one.
+  # so better if I can just specify that we want to use pinentry_gnome in the config
+  # nixpkgs.config.packageOverrides = pkgs:
+  #   { gnupg = pkgs.gnupg.override { pinentry = pkgs.pinentry_gnome; };
+  # };
 
   nixpkgs.overlays = [
     (import ./overlays/packages.nix)
@@ -122,7 +126,8 @@ in
   # services.xserver.desktopManager.plasma5.enable = true;
 
   # gdm starts pulseaudio which interferes with bluetooth and user pulseaudio
-  # don't know how to disable that through nix yet
+  # don't know how to disable that through nix yet - and why even use gdm when
+  # I'm not that fond of gnome3 anyway.
   # services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.displayManager.lightdm.background = meta.dmBackground;
@@ -176,6 +181,6 @@ in
   # servers. You should change this only after NixOS release notes say you
   # should.
   # system.stateVersion = "18.03"; # Did you read the comment? old name
-  system.nixos.stateVersion = "18.03"; # Did you read the comment?
+  system.nixos.stateVersion = "18.03"; # Did you read the comment? new name (after 18.03)
 
 }
