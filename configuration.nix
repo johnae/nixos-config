@@ -48,12 +48,9 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
-  # this would force all packages that depend on gnupg somehow to be built from source
-  # those include gpgme <- libreoffice and the libreoffice build isn't a fun one.
-  # so better if I can just specify that we want to use pinentry_gnome in the config
-  # nixpkgs.config.packageOverrides = pkgs:
-  #   { gnupg = pkgs.gnupg.override { pinentry = pkgs.pinentry_gnome; };
-  # };
+  #nixpkgs.config.packageOverrides = pkgs:
+  #  { gnupg = pkgs.gnupg.override { pinentry = pkgs.pinentry_gnome; };
+  #};
 
   nixpkgs.overlays = [
     (import ./overlays/packages.nix)

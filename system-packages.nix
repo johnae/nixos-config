@@ -1,16 +1,12 @@
-#let stdenv = [ stdenv.cc stdenv.cc.binutils ] ++ stdenv.initialPath; in
-
 pkgs: with pkgs; [
-  # man pages
   man-pages
 
   dropbox
 
-  # media
   spotify
   mpv
   vlc
-  libreoffice
+  # libreoffice ## currently problematic as it wants to be built
   abiword
   gnome3.gedit
   gimp
@@ -18,7 +14,6 @@ pkgs: with pkgs; [
   evince
   imagemagick
 
-  # X11 stuff
   xss-lock
   xsel
   xclip
@@ -28,14 +23,17 @@ pkgs: with pkgs; [
   xorg.xprop
   arandr
 
-  # CLI tools
   ii
   direnv
   bmon
   iftop
   file
   python2Packages.docker_compose
+  gnumake
+  gcc
+  cacert
 
+  acpi
   iw
   mosh
   openssl
@@ -82,6 +80,7 @@ pkgs: with pkgs; [
   zsh
   tmux
   nix-prefetch-scripts
+  nix-prefetch-github
   ctags
   global
   rtags
@@ -107,4 +106,5 @@ pkgs: with pkgs; [
 
   spook
   alacritty
+  fire
 ]
