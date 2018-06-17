@@ -92,8 +92,13 @@ pkgs: with pkgs; [
   hicolor_icon_theme
   tango-icon-theme
   shared_mime_info
-  arc-theme
   arc-icon-theme
+  papirus-icon-theme
+  adapta-backgrounds
+  adapta-gtk-theme
+  adapta-kde-theme
+
+
   gnome3.nautilus
   lxappearance
   feh

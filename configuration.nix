@@ -128,8 +128,8 @@ in
   # services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.displayManager.lightdm.background = meta.dmBackground;
-  services.xserver.displayManager.lightdm.greeters.gtk.theme.name = "Arc-Dark";
-  services.xserver.displayManager.lightdm.greeters.gtk.theme.package = pkgs.arc-theme;
+  services.xserver.displayManager.lightdm.greeters.gtk.theme.name = "Adapta-Nokto";
+  services.xserver.displayManager.lightdm.greeters.gtk.theme.package = pkgs.adapta-gtk-theme;
   services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = ''
     indicators=~spacer;~spacer;~session;~power
   '';
