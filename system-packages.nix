@@ -29,6 +29,7 @@ pkgs: with pkgs; [
   vanilla-dmz
   numix-cursor-theme
   arandr
+  xorg.xbacklight
 
   ii
   direnv
