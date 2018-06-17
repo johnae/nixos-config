@@ -33,6 +33,7 @@ pkgs: with pkgs; [
   gnumake
   gcc
   cacert
+  bc
 
   acpi
   iw
