@@ -16,12 +16,13 @@ USERNAME=$($SUDO cat $PREFIX/etc/nixos/configuration.nix | grep extraUsers | hea
 
 ICON=$($SUDO cat $PREFIX/etc/nixos/meta.nix | grep userIcon | awk -F'"' '{print $2}')
 
+$SUDO rm -rf $PREFIX/home/shared
 $SUDO cp -R shared $PREFIX/home/shared
 
-$SUDO mkdir -p $PREFIX/var/lib/AccountsService/icons
-$SUDO mkdir -p $PREFIX/var/lib/AccountsService/users
-$SUDO cp -R user-icons/ $PREFIX/var/lib/AccountsService/icons/
+$SUDO rm -rf $PREFIX/var/lib/AccountsService/icons
+$SUDO cp -R user-icons $PREFIX/var/lib/AccountsService/icons
 
+$SUDO mkdir -p $PREFIX/var/lib/AccountsService/users
 cat <<EOF | $SUDO tee $PREFIX/var/lib/AccountsService/users/$USERNAME
 [User]
 XSession=none+i3
