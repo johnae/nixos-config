@@ -130,6 +130,9 @@ in
   services.xserver.displayManager.lightdm.background = meta.dmBackground;
   services.xserver.displayManager.lightdm.greeters.gtk.theme.name = "Arc-Dark";
   services.xserver.displayManager.lightdm.greeters.gtk.theme.package = pkgs.arc-theme;
+  services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = ''
+    indicators=~spacer;~spacer;~session;~power
+  '';
 
   services.xserver.windowManager.i3.enable = true;
   services.xserver.windowManager.i3.extraSessionCommands = ''
