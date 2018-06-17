@@ -102,7 +102,7 @@ pkgs: with pkgs; [
   adapta-gtk-theme
   adapta-kde-theme
 
-
+  gsimplecal
   gnome3.nautilus
   gnome3.sushi
   lxappearance
