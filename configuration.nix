@@ -109,6 +109,19 @@ in
 
   powerManagement.cpuFreqGovernor = "powersave";
 
+  services.redshift = {
+    enable = true;
+    latitude = "43.365";
+    longitude = "-8.41";
+    temperature.day = 6500;
+    temperature.night = 2700;
+  };
+
+  services.syncthing = {
+    enable = true;
+    user = "john";
+    dataDir = "/home/john/.config/syncthing";
+  };
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -154,6 +167,12 @@ in
      fi
      if [ -e $HOME/.profile.d/zsh/fzf-theme.zsh ]; then
        source $HOME/.profile.d/zsh/fzf-theme.zsh
+     fi
+     # Load X defaults.
+     if test -e ~/.Xresources-${meta.hostName}; then
+         ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources-${meta.hostName}
+     elif test -e ~/.Xdefaults-${meta.hostName}; then
+         ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults-${meta.hostName}
      fi
   '';
 
