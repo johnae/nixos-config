@@ -132,6 +132,7 @@ in
   services.xserver.displayManager.lightdm.greeters.gtk.theme.package = pkgs.adapta-gtk-theme;
   services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = ''
     indicators=~spacer;~spacer;~session;~power
+    ${meta.lightdmExtraConfig}
   '';
 
   services.xserver.windowManager.i3.enable = true;
