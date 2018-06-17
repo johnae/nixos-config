@@ -15,6 +15,7 @@ pkgs: with pkgs; [
   imagemagick
 
   xss-lock
+  lightlocker
   xsel
   xclip
   xdotool
