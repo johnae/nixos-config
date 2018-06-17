@@ -149,6 +149,9 @@ in
      if [ -e $HOME/.profile.d/zsh/path.zsh ]; then
        source $HOME/.profile.d/zsh/path.zsh
      fi
+     if [ -e $HOME/.profile.d/zsh/aliases.zsh ]; then
+       source $HOME/.profile.d/zsh/aliases.zsh
+     fi
      if [ -e $HOME/.profile.d/zsh/fzf-theme.zsh ]; then
        source $HOME/.profile.d/zsh/fzf-theme.zsh
      fi
