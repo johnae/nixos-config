@@ -37,6 +37,11 @@ if [ -z "$HNAME" ]; then
     exit 1
 fi
 
+PARTITION_PREFIX=""
+if echo "$DISK" | grep -q "nvme"; then
+    PARTITION_PREFIX="p"
+fi
+
 echo "Will completely erase and format '$DISK', proceed? (y/n)"
 read answer
 if ! echo "$answer" | grep '^[Yy].*' 2>&1>/dev/null; then
@@ -66,10 +71,10 @@ sgdisk -n 0:0:+$luks_key_space -t 0:8300 -c 0:"cryptkey" $DISK # 2
 sgdisk -n 0:0:+$swap_space -t 0:8300 -c 0:"swap" $DISK # 3
 sgdisk -n 0:0:0 -t 0:8300 -c 0:"root" $DISK # 4
 
-DISK_EFI=$DISK"1"
-DISK_CRYPTKEY=$DISK"2"
-DISK_SWAP=$DISK"3"
-DISK_ROOT=$DISK"4"
+DISK_EFI=$DISK$PARTITION_PREFIX"1"
+DISK_CRYPTKEY=$DISK$PARTITION_PREFIX"2"
+DISK_SWAP=$DISK$PARTITION_PREFIX"3"
+DISK_ROOT=$DISK$PARTITION_PREFIX"4"
 
 sgdisk -p $DISK
 
