@@ -13,6 +13,9 @@ pkgs: with pkgs; [
   inkscape
   evince
   imagemagick
+  slack
+  notify-osd
+  notify-desktop
 
   xss-lock
   lightlocker
