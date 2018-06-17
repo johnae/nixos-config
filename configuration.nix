@@ -107,6 +107,8 @@ in
   services.dbus.packages = [ pkgs.gnome3.gconf pkgs.gnome3.gcr ];
   environment.pathsToLink = [ "/etc/gconf" ];
 
+  powerManagement.cpuFreqGovernor = "powersave";
+
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
