@@ -22,6 +22,9 @@ pkgs: with pkgs; [
   compton
   xorg.xev
   xorg.xprop
+  xorg.xcursorthemes
+  vanilla-dmz
+  numix-cursor-theme
   arandr
 
   ii
@@ -101,6 +104,7 @@ pkgs: with pkgs; [
 
 
   gnome3.nautilus
+  gnome3.sushi
   lxappearance
   feh
 
