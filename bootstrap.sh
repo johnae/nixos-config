@@ -7,7 +7,7 @@ DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
 # 2. You want encrypted root and swap
 # 3. You want swap space size to be half of RAM as per modern standards (eg. see https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/installation_guide/sect-disk-partitioning-setup-x86#sect-recommended-partitioning-scheme-x86)
 # 4. You want to use btrfs for everything else and you want to use subvolumes for /, /var and /home
-# 5. You want to not care about atime and you want to compress your fs using lzo
+# 5. You want to not care about atime and you want to compress your fs using zstd
 
 # set -x
 
@@ -113,7 +113,7 @@ swapon /dev/disk/by-uuid/$DECRYPTED_SWAP_UUID
 
 DECRYPTED_ROOT_UUID=$(ls -lah /dev/disk/by-uuid/ | grep $DM_ROOT | awk '{print $9}')
 # mount the decrypted cryptroot to /mnt (btrfs)
-mount -o rw,noatime,compress=lzo,ssd,space_cache /dev/disk/by-uuid/$DECRYPTED_ROOT_UUID /mnt
+mount -o rw,noatime,compress=zstd,ssd,space_cache /dev/disk/by-uuid/$DECRYPTED_ROOT_UUID /mnt
 
 # now create btrfs subvolumes we're interested in having
 cd /mnt
@@ -126,11 +126,11 @@ cd $DIR
 umount /mnt
 
 # mount the "root" (@) subvolume to /mnt
-mount -o rw,noatime,compress=lzo,ssd,space_cache,subvol=@ /dev/disk/by-uuid/$DECRYPTED_ROOT_UUID /mnt
+mount -o rw,noatime,compress=zstd,ssd,space_cache,subvol=@ /dev/disk/by-uuid/$DECRYPTED_ROOT_UUID /mnt
 # mount @home subvolume to /mnt/home
-mount -o rw,noatime,compress=lzo,ssd,space_cache,subvol=@home /dev/disk/by-uuid/$DECRYPTED_ROOT_UUID /mnt/home
+mount -o rw,noatime,compress=zstd,ssd,space_cache,subvol=@home /dev/disk/by-uuid/$DECRYPTED_ROOT_UUID /mnt/home
 # mount @var subvolume to /mnt/var
-mount -o rw,noatime,compress=lzo,ssd,space_cache,subvol=@var /dev/disk/by-uuid/$DECRYPTED_ROOT_UUID /mnt/var
+mount -o rw,noatime,compress=zstd,ssd,space_cache,subvol=@var /dev/disk/by-uuid/$DECRYPTED_ROOT_UUID /mnt/var
 
 BOOT_UUID=$(ls -lah /dev/disk/by-uuid/ | grep $(basename $DISK_EFI) | awk '{print $9}')
 # and mount the boot partition

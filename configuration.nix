@@ -39,9 +39,9 @@ in
   };
 
   # additional fs options
-  fileSystems."/".options = [ "subvol=@" "rw" "noatime" "compress=lzo" "ssd" "space_cache" ];
-  fileSystems."/home".options = [ "subvol=@home" "rw" "noatime" "compress=lzo" "ssd" "space_cache" ];
-  fileSystems."/var".options = [ "subvol=@var" "rw" "noatime" "compress=lzo" "ssd" "space_cache" ];
+  fileSystems."/".options = [ "subvol=@" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
+  fileSystems."/home".options = [ "subvol=@home" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
+  fileSystems."/var".options = [ "subvol=@var" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
 
   # Set your time zone.
   time.timeZone = "Europe/Stockholm";
