@@ -26,6 +26,7 @@ in
   hardware.cpu.intel.updateMicrocode = true;
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
+  hardware.u2f.enable = true;
 
   networking.hostName = meta.hostName;
   networking.extraHosts = "127.0.1.1 ${meta.hostName}";
