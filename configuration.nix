@@ -156,7 +156,7 @@ in
   services.xserver.windowManager.i3.enable = true;
   services.xserver.windowManager.i3.extraSessionCommands = ''
      export PATH=$HOME/Local/bin:$PATH
-     if [-e $HOME/.defaultrc ]; then
+     if [ -e $HOME/.defaultrc ]; then
        source $HOME/.defaultrc
      fi
      if [ -e $HOME/.localrc ]; then
@@ -172,9 +172,10 @@ in
        source $HOME/.profile.d/zsh/fzf-theme.zsh
      fi
      # Load X defaults.
-     if test -e ~/.Xresources-${meta.hostName}; then
+     if [ -e $HOME/.Xresources-${meta.hostName} ]; then
          ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources-${meta.hostName}
-     elif test -e ~/.Xdefaults-${meta.hostName}; then
+     fi
+     if [ -e $HOME/.Xdefaults-${meta.hostName} ]; then
          ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults-${meta.hostName}
      fi
   '';
