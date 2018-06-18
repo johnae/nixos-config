@@ -7,28 +7,32 @@ if [ "$(id -u)" != "0" ]; then
 	SUDO=sudo
 fi
 
-$SUDO cp configuration.nix $PREFIX/etc/nixos/configuration.nix
-$SUDO cp system-packages.nix $PREFIX/etc/nixos/system-packages.nix
-$SUDO cp -R overlays $PREFIX/etc/nixos/overlays
-$SUDO cp -R packages $PREFIX/etc/nixos/packages
+FILES="configuration.nix system-packages.nix meta.nix"
+DIRECTORIES="overlays packages shared user-icons"
 
-USERNAME=$($SUDO cat $PREFIX/etc/nixos/configuration.nix | grep extraUsers | head -1 | awk -F'.' '{print $3}' | awk '{print $1}')
+OIFS=$IFS
+IFS=" "
 
-ICON=$($SUDO cat $PREFIX/etc/nixos/meta.nix | grep userIcon | awk -F'"' '{print $2}')
+for FILE in $FILES; do
+    if [ -f $FILE ]; then
+        echo "Copying file $FILE to $PREFIX/etc/nixos/$FILE"
+        $SUDO cp $FILE $PREFIX/etc/nixos/$FILE
+    else
+        echo "Not copying $FILE as it doesn't exist or is not a regular file"
+    fi
+done
 
-$SUDO rm -rf $PREFIX/home/shared
-$SUDO cp -R shared $PREFIX/home/shared
+for DIR in $DIRECTORIES; do
+    if [ -d $DIR ]; then
+        $SUDO rm -rf $PREFIX/etc/nixos/$DIR
+        echo "Copying directory $DIR to $PREFIX/etc/nixos/$DIR"
+        $SUDO cp -R $DIR $PREFIX/etc/nixos/$DIR
+    else
+        echo "Not copying $DIR as it doesn't exist or is not a directory"
+    fi
+done
 
-$SUDO rm -rf $PREFIX/var/lib/AccountsService/icons
-$SUDO cp -R user-icons $PREFIX/var/lib/AccountsService/icons
-
-$SUDO mkdir -p $PREFIX/var/lib/AccountsService/users
-cat <<EOF | $SUDO tee $PREFIX/var/lib/AccountsService/users/$USERNAME
-[User]
-XSession=none+i3
-Icon=$ICON
-SystemAccount=false
-EOF
+IFS=$OIFS
 
 if [ -z "$PREFIX" ]; then
     $SUDO nixos-rebuild switch

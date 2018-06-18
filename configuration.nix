@@ -204,6 +204,29 @@ in
     hashedPassword = meta.userPassword;
   };
 
+  system.activationScripts = {
+    linkShared = pkgs.lib.stringAfter [ "users" ]
+    ''
+      rm -rf /home/shared
+      ln -s /etc/nixos/shared /home/shared
+    '';
+    linkIcons = pkgs.lib.stringAfter [ "users" ]
+    ''
+      mkdir -p /var/lib/AccountsService
+      rm -rf /var/lib/AccountsService/icons
+      ln -s /etc/nixos/user-icons /var/lib/AccountsService/icons
+    '';
+    accountsSvcUser = pkgs.lib.stringAfter [ "users" ]
+    ''
+      cat <<EOF> /var/lib/AccountsService/users/john
+      [User]
+      XSession=none+i3
+      Icon=${meta.userIcon}
+      SystemAccount=false
+      EOF
+    '';
+  };
+
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
