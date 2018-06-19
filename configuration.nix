@@ -160,10 +160,8 @@ in
   services.xserver.displayManager.lightdm.background = meta.dmBackground;
   services.xserver.displayManager.lightdm.greeters.gtk.theme.name = "Adapta-Nokto";
   services.xserver.displayManager.lightdm.greeters.gtk.theme.package = pkgs.adapta-gtk-theme;
-  services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = ''
-    indicators=~spacer;~spacer;~session;~power
-    ${meta.lightdmExtraConfig}
-  '';
+  services.xserver.displayManager.lightdm.greeters.gtk.indicators = [ "~spacer" "~spacer" "~session" "~power" ];
+  services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = meta.lightdmExtraConfig;
 
   services.xserver.windowManager.i3.enable = true;
   services.xserver.windowManager.i3.extraSessionCommands = ''
