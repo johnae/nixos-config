@@ -126,11 +126,8 @@ in
     temperature.night = 2700;
   };
 
-  services.syncthing = {
-    enable = true;
-    user = "john";
-    dataDir = "/home/john/.config/syncthing";
-  };
+  # Hide the cursor unless moving it around
+  services.unclutter.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
