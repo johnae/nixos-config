@@ -110,6 +110,14 @@ in
 
   powerManagement.cpuFreqGovernor = "powersave";
 
+  services.syncthing = {
+    enable = true;
+    user = "john";
+    dataDir = "/home/john/.config/syncthing";
+  };
+
+
+  # Don't hurt my eyes at night
   services.redshift = {
     enable = true;
     latitude = "43.365";
