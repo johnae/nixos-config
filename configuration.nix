@@ -141,6 +141,7 @@ in
   services.xserver.libinput.naturalScrolling = true;
   services.xserver.libinput.middleEmulation = true;
   services.xserver.libinput.tapping = true;
+  services.xserver.libinput.disableWhileTyping = true;
 
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.sddm.enable = true;
