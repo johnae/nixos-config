@@ -109,6 +109,8 @@ in
   environment.pathsToLink = [ "/etc/gconf" ];
 
   powerManagement.cpuFreqGovernor = "powersave";
+  powerManagement.enable = true;
+  powerManagement.powertop.enable = true;
 
   services.syncthing = {
     enable = true;
@@ -128,6 +130,9 @@ in
 
   # Hide the cursor unless moving it around
   services.unclutter.enable = true;
+
+  # Enable upower
+  services.upower.enable = true;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
