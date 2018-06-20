@@ -26,6 +26,7 @@ pkgs: with pkgs; [
   xorg.xev
   xorg.xprop
   xorg.xcursorthemes
+  xorg.xrandr
   vanilla-dmz
   numix-cursor-theme
   arandr
