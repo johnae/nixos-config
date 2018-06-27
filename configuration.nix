@@ -194,6 +194,7 @@ in
      google-fonts
      source-code-pro
      system-san-francisco-font
+     san-francisco-mono-font
      font-awesome_4
      font-droid
      powerline-fonts
