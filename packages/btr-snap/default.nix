@@ -1,5 +1,4 @@
-#{ stdenv, pkgs, ... }:
-with import <nixpkgs>{};
+{ stdenv, pkgs, ... }:
 
 with pkgs;
 

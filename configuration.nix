@@ -191,6 +191,15 @@ in
      fi
   '';
 
+  systemd.services.rbsnapper = rec {
+    description = "Backup (btrfs) snapshot of home every ${startAt}";
+    startAt = "30 minutes";
+    environment = {};
+    serviceConfig = {
+      ExecStart = "${pkgs.btr-snap}/bin/btr-snap /home ${meta.backupDestination} ${meta.backupPort} ${meta.backupSshKey}";
+    };
+  };
+
   fonts.fonts = with pkgs; [
      google-fonts
      source-code-pro
