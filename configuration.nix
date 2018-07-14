@@ -114,8 +114,8 @@ in
 
   services.syncthing = {
     enable = true;
-    user = "john";
-    dataDir = "/home/john/.config/syncthing";
+    user = "${meta.userName}";
+    dataDir = "/home/${meta.userName}/.config/syncthing";
   };
 
 
@@ -206,12 +206,12 @@ in
   # Make sure the only way to add users/groups is to change this file
   users.mutableUsers = false;
 
-  users.groups.john.gid = 1337;
-  users.extraUsers.john = {
+  users.groups."${meta.userName}".gid = 1337;
+  users.extraUsers."${meta.userName}" = {
     isNormalUser = true;
     uid = 1337;
     extraGroups = [ "wheel" "docker" "video" "audio" ];
-    description = "John Axel Eriksson";
+    description = meta.userDescription;
     shell = pkgs.zsh;
     hashedPassword = meta.userPassword;
   };
@@ -230,7 +230,7 @@ in
     '';
     accountsSvcUser = pkgs.lib.stringAfter [ "users" ]
     ''
-      cat <<EOF> /var/lib/AccountsService/users/john
+      cat <<EOF> /var/lib/AccountsService/users/${meta.userName}
       [User]
       XSession=none+i3
       Icon=${meta.userIcon}
