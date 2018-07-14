@@ -71,18 +71,6 @@ if ! $self/btr-snap-send $volume $host $port $sshkey /storage; then
    exit 1
 fi
 
-## Check remote if we have any backups there yet (and if not initialize the remote)
-#if ! $self/btr-remote-status $host $port $sshkey exists $dest
-#  ## setup remote by sending current snapshot in full
-#   #btrfs send -p $volume $self/btr-ssh $host $port $sshkey receive
-#fi
-
-## Now send the diff between current and new
-#if ! $BINDIR/btr-snap-send $VOLUME; then
-## exit before the rest if this fails
-## blah
-#fi
-
 ## Now rename local current to whenever it was made and rename new to current
 
 $self/btr-snap-promote $volume
