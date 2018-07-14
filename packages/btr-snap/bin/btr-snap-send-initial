@@ -28,7 +28,7 @@ if [ $(stat --format=%i $volume) -ne 256 ]; then
   exit 1
 fi
 
-if ! $self/btr-ssh $host $port $sshkey setup $remotedir/$hostname/$volume; then
+if ! $self/btr-ssh $host $port $sshkey setup $remotedir/$hostname/$noleadingslash_volume; then
    echo >&2 "error setting up remote $host:$port for receiving backups - giving up"
    exit 1
 fi
