@@ -192,8 +192,8 @@ in
   '';
 
   systemd.services.rbsnapper = rec {
-    description = "Backup (btrfs) snapshot of home every ${startAt}";
-    startAt = "30 minutes";
+    description = "Backup (btrfs) snapshot of home";
+    startAt = "*:0/30"; ## every 30 minutes
     environment = {};
     serviceConfig = {
       ExecStart = "${pkgs.btr-snap}/bin/btr-snap /home ${meta.backupDestination} ${meta.backupPort} ${meta.backupSshKey}";
