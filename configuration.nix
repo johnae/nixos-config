@@ -7,6 +7,7 @@
 # For machine specific stuff
 let
   meta = import ./meta.nix;
+  stdenv = pkgs.stdenv;
 
 in
 
@@ -164,6 +165,29 @@ in
   services.xserver.displayManager.lightdm.greeters.gtk.indicators = [ "~spacer" "~spacer" "~session" "~power" ];
   services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = meta.lightdmExtraConfig;
 
+  services.compton.enable = true;
+  services.compton.fade = true;
+  services.compton.backend = "glx";
+  services.compton.vSync = "opengl-swc";
+  services.compton.fadeDelta = 6;
+  services.compton.fadeSteps = [ "0.08" "0.08" ];
+  services.compton.inactiveOpacity = "0.89";
+  services.compton.extraOptions = ''
+    inactive-dim = 0.3;
+    blur-background = true;
+    blur-background-frame = true;
+    blur-background-fixed = false;
+    blur-background-exclude = [ "window_type = 'dock'", "window_type = 'desktop'" ];
+    no-fading-openclose = false; # Avoid fade windows in/out when opening/closing.
+    mark-wmmin-focused = true;
+    mark-ovredir-focused = true;
+    detect-rounded-corners = true;
+    unredir-if-possible = true;
+    detect-transient = true;
+    glx-no-stencil = true;
+    glx-no-rebind-pixmap = true;
+  '';
+
   services.xserver.windowManager.i3.enable = true;
   services.xserver.windowManager.i3.extraSessionCommands = ''
      export PATH=$HOME/Local/bin:$PATH
@@ -194,9 +218,13 @@ in
   systemd.services.rbsnapper = rec {
     description = "Backup (btrfs) snapshot of home";
     startAt = "*:0/30"; ## every 30 minutes
-    environment = {};
+    environment = {
+      DISPLAY = ":0";
+      XAUTHORITY="/home/${meta.userName}/.Xauthority";
+    };
     serviceConfig = {
       ExecStart = "${pkgs.btr-snap}/bin/btr-snap /home ${meta.backupDestination} ${meta.backupPort} ${meta.backupSshKey}";
+      ExecStopPost = ''${stdenv.shell} -c "if [ \"$EXIT_STATUS\" = "0" ]; then ${pkgs.notify-desktop}/bin/notify-desktop Backup 'Completed backup of /home to ${meta.backupDestination}'; else ${pkgs.notify-desktop}/bin/notify-desktop Backup 'Failed backup of /home to ${meta.backupDestination}'; fi"'';
     };
   };
 
