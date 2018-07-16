@@ -223,7 +223,7 @@ in
       XAUTHORITY="/home/${meta.userName}/.Xauthority";
     };
     serviceConfig = {
-      ExecStart = "${pkgs.btr-snap}/bin/btr-snap /home ${meta.backupDestination} ${meta.backupPort} ${meta.backupSshKey}";
+      ExecStart = ''${pkgs.udev}/bin/systemd-inhibit --what="idle:shutdown:sleep" --who="btr-snap" --why="Backing up /home" --mode=block ${pkgs.btr-snap}/bin/btr-snap /home ${meta.backupDestination} ${meta.backupPort} ${meta.backupSshKey}'';
       ExecStopPost = ''${stdenv.shell} -c "if [ \"$EXIT_STATUS\" = "0" ]; then ${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/cloud-computing-3.svg Backup 'Completed backup of /home to ${meta.backupDestination}'; else ${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/error.svg Backup 'Failed backup of /home to ${meta.backupDestination}'; fi"'';
     };
   };
