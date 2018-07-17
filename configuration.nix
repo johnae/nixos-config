@@ -125,8 +125,8 @@ in
   # Don't hurt my eyes at night
   services.redshift = {
     enable = true;
-    latitude = "43.365";
-    longitude = "-8.41";
+    latitude = "59.344";
+    longitude = "18.045";
     temperature.day = 6500;
     temperature.night = 2700;
   };
