@@ -23,6 +23,7 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = meta.kernelParams;
 
   hardware.cpu.intel.updateMicrocode = true;
   hardware.opengl.enable = true;
