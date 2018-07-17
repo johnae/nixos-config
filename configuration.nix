@@ -223,10 +223,25 @@ in
       DISPLAY = ":0";
       XAUTHORITY="/home/${meta.userName}/.Xauthority";
     };
-    serviceConfig = {
-      ExecStart = ''${pkgs.udev}/bin/systemd-inhibit --what="idle:shutdown:sleep" --who="btr-snap" --why="Backing up /home" --mode=block ${pkgs.btr-snap}/bin/btr-snap /home ${meta.backupDestination} ${meta.backupPort} ${meta.backupSshKey}'';
-      ExecStopPost = ''${stdenv.shell} -c "if [ \"$EXIT_STATUS\" = "0" ]; then ${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/cloud-computing-3.svg Backup 'Completed backup of /home to ${meta.backupDestination}'; else ${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/error.svg Backup 'Failed backup of /home to ${meta.backupDestination}'; fi"'';
-    };
+    preStart = ''
+      ${pkgs.udev}/bin/systemctl set-environment BACKUP_STARTED_AT=$(${pkgs.coreutils}/bin/date +%s)
+    '';
+    script = ''
+      ${pkgs.udev}/bin/systemd-inhibit --what="idle:shutdown:sleep" \
+                                       --who="btr-snap" --why="Backing up /home" --mode=block \
+                                       ${pkgs.btr-snap}/bin/btr-snap /home ${meta.backupDestination} ${meta.backupPort} ${meta.backupSshKey}
+    '';
+    postStop = ''
+      BACKUP_ENDED_AT=$(${pkgs.coreutils}/bin/date +%s)
+      BACKUP_DURATION=$(($BACKUP_ENDED_AT - $BACKUP_STARTED_AT))
+      if [ "$EXIT_STATUS" = "0" ]; then
+         ${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/cloud-computing-3.svg \
+                                                      Backup "Completed backup of /home to ${meta.backupDestination} in $BACKUP_DURATION"s
+      else
+         ${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/error.svg \
+                                                      Backup "Failed backup of /home to ${meta.backupDestination} after $BACKUP_DURATION"s
+      fi;
+    '';
   };
 
   fonts.fonts = with pkgs; [
