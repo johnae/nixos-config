@@ -36,12 +36,24 @@ fi
 
 snapshot=.snapshot
 current=current
+maxstatusretries=3
+statusretries=$maxstatusretries
+statusretrywait=5 # seconds
 
-## Check if remote is reachable at all (the hello argument is required but not used at remote because "reasons")
-if ! $self/btr-remote-status $host $port $sshkey check hello; then
-   echo >&2 "cannot reach remote $host:$port using key $sshkey"
-   exit 1
-fi
+## Check if remote is reachable at all (the hello argument is required but not used at remote because "reasons") - will retry a number of times
+while true; do
+    if $self/btr-remote-status $host $port $sshkey check hello; then
+        break
+    else
+        statusretries=$(($statusretries - 1))
+        if [ $statusretries -le 0 ]; then
+            echo >&2 "cannot reach remote $host:$port using key $sshkey after $maxstatusretries retries, giving up"
+            exit 1
+        fi
+        echo >&2 "remote status failed, retrying in $statusretrywait s - $statusretries retries left"
+        sleep $statusretrywait
+    fi
+done
 
 if [ $(stat --format=%i $volume) -ne 256 ]; then
   echo >&2 "$volume is not a btrfs subvolume, sorry."
