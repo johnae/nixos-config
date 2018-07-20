@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 # For machine specific stuff
 let
@@ -33,6 +33,7 @@ in
   networking.hostName = meta.hostName;
   networking.extraHosts = "127.0.1.1 ${meta.hostName}";
   networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
 
   # Select internationalisation properties.
   i18n = {
@@ -217,7 +218,7 @@ in
   '';
 
   systemd.services.rbsnapper = rec {
-    description = "Backup (btrfs) snapshot of home";
+    description = "Snapshot and remote backup of /home to ${meta.backupDestination}";
     startAt = "*:0/30"; ## every 30 minutes
     environment = {
       DISPLAY = ":0";
@@ -236,10 +237,10 @@ in
       BACKUP_DURATION=$(($BACKUP_ENDED_AT - $BACKUP_STARTED_AT))
       if [ "$EXIT_STATUS" = "0" ]; then
          ${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/cloud-computing-3.svg \
-                                                      Backup "Completed backup of /home to ${meta.backupDestination} in $BACKUP_DURATION"s
+                                                      Backup "Completed ${lib.toLower description} in $BACKUP_DURATION"s.
       else
-         ${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/error.svg \
-                                                      Backup "Failed backup of /home to ${meta.backupDestination} after $BACKUP_DURATION"s
+         ${pkgs.notify-desktop}/bin/notify-desktop -u critical -i /home/shared/icons/error.svg \
+                                                      Backup "Failed ${lib.toLower description} after $BACKUP_DURATION"s.
       fi;
     '';
   };
