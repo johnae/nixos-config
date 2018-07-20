@@ -38,7 +38,7 @@ snapshot=.snapshot
 current=current
 maxstatusretries=3
 statusretries=$maxstatusretries
-statusretrywait=5 # seconds
+statusretrywait=10 # seconds
 
 ## Check if remote is reachable at all (the hello argument is required but not used at remote because "reasons") - will retry a number of times
 while true; do
