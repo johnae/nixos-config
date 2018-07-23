@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ex
+set -x
 
 self=$(cd $(dirname $0) && pwd)
 
