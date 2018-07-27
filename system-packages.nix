@@ -88,6 +88,7 @@ pkgs: with pkgs; [
   vim
   git
   zsh
+  fish
   tmux
   nix-prefetch-scripts
   nix-prefetch-github

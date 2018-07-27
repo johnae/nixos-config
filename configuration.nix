@@ -69,7 +69,7 @@ in
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
   '';
 
-  environment.shells = [ pkgs.bashInteractive pkgs.zsh ];
+  environment.shells = [ pkgs.bashInteractive pkgs.zsh pkgs.fish ];
 
   # Enable docker
   virtualisation.docker.enable = true;
@@ -79,6 +79,7 @@ in
   # programs.bash.enableCompletion = true;
   # programs.mtr.enable = true;
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  programs.ssh.startAgent = false;
   programs.ssh.knownHosts = meta.knownHosts;
 
   services.pcscd.enable = true;
@@ -89,7 +90,7 @@ in
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  users.defaultUserShell = pkgs.zsh;
+  users.defaultUserShell = pkgs.fish;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -192,34 +193,40 @@ in
 
   services.xserver.windowManager.i3.enable = true;
   services.xserver.windowManager.i3.extraSessionCommands = ''
-     export PATH=$HOME/Local/bin:$PATH
-     if [ -e $HOME/.defaultrc ]; then
-       source $HOME/.defaultrc
-     fi
-     if [ -e $HOME/.localrc ]; then
-       source $HOME/.localrc
-     fi
-     if [ -e $HOME/.profile.d/zsh/path.zsh ]; then
-       source $HOME/.profile.d/zsh/path.zsh
-     fi
-     if [ -e $HOME/.profile.d/zsh/aliases.zsh ]; then
-       source $HOME/.profile.d/zsh/aliases.zsh
-     fi
-     if [ -e $HOME/.profile.d/zsh/fzf-theme.zsh ]; then
-       source $HOME/.profile.d/zsh/fzf-theme.zsh
-     fi
-     # Load X defaults.
-     if [ -e $HOME/.Xresources-${meta.hostName} ]; then
-         ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources-${meta.hostName}
-     fi
-     if [ -e $HOME/.Xdefaults-${meta.hostName} ]; then
-         ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults-${meta.hostName}
-     fi
+    export QT_STYLE_OVERRIDE=gtk
+    export VISUAL=edit
+    export EDITOR=$VISUAL
+    export PROJECTS=~/Development
+    if [ -e .config/syncthing/config.xml ]; then
+       SYNCTHING_API_KEY=$(cat .config/syncthing/config.xml | grep apikey | awk -F">|</" '{print $2}')
+       if [ "$SYNCTHING_API_KEY" != "" ]; then
+          export SYNCTHING_API_KEY
+       fi
+    fi
+    # Load X defaults.
+    if [ -e $HOME/.Xresources ]; then
+        ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources
+    fi
+    if [ -e $HOME/.Xdefaults ]; then
+        ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
+    fi
   '';
+
+
+  # want to run this not on an OnCalendar spec but rather on certain system events
+  # otherwise we could have used just the "startAt" field of service.
+  systemd.timers.rbsnapper = {
+    description = "run rbsnapper every 30 minutes and 5 minutes after boot";
+    wantedBy = [ "timers.target" ]; # enable it and autostart
+
+    timerConfig = {
+      OnBootSec = "5m"; # always run rbsnapper 5 minutes after boot
+      OnUnitInactiveSec = "30m"; # run rbsnapper 30 minutes after it last finished
+    };
+  };
 
   systemd.services.rbsnapper = rec {
     description = "Snapshot and remote backup of /home to ${meta.backupDestination}";
-    startAt = "*:0/30"; ## every 30 minutes
     environment = {
       DISPLAY = ":0";
       XAUTHORITY="/home/${meta.userName}/.Xauthority";
@@ -267,7 +274,7 @@ in
     uid = 1337;
     extraGroups = [ "wheel" "docker" "video" "audio" ];
     description = meta.userDescription;
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     hashedPassword = meta.userPassword;
   };
 

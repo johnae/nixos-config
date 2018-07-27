@@ -2,6 +2,8 @@
 
 This is my NixOS setup. It encrypts all disks including swap, uses compressed btrfs as fs.
 
+You might also be interested in my user dotfiles repo here: [nixdot](https://github.com/johnae/nixdot).
+
 Installation goes something like (for a fresh install, unformatted disks etc):
 
 Connect to a wifi first:
