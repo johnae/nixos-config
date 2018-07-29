@@ -204,12 +204,9 @@ in
           export SYNCTHING_API_KEY
        fi
     fi
-    # Load X defaults.
+    # Load X resources.
     if [ -e $HOME/.Xresources ]; then
-        ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xresources
-    fi
-    if [ -e $HOME/.Xdefaults ]; then
-        ${pkgs.xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
+        ${pkgs.xorg.xrdb}/bin/xrdb -merge $HOME/.Xresources
     fi
   '';
 
