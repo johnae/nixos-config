@@ -180,7 +180,8 @@ in
     blur-background = true;
     blur-background-frame = true;
     blur-background-fixed = false;
-    blur-background-exclude = [ "window_type = 'dock'", "window_type = 'desktop'" ];
+    blur-background-exclude = [ "window_type = 'dock'", "window_type = 'desktop'", "class_g = 'slop'", "name = 'Screenshot'" ];
+    shadow-exclude = ["name = 'Screenshot'", "class_g = 'slop'"];
     no-fading-openclose = false; # Avoid fade windows in/out when opening/closing.
     mark-wmmin-focused = true;
     mark-ovredir-focused = true;
