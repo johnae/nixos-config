@@ -110,7 +110,7 @@ in
   };
   hardware.bluetooth.enable = true;
 
-  services.dbus.packages = [ pkgs.gnome3.gconf pkgs.gnome3.gcr ];
+  services.dbus.packages = [ pkgs.gnome2.GConf pkgs.gnome3.gcr ];
   environment.pathsToLink = [ "/etc/gconf" ];
 
   powerManagement.cpuFreqGovernor = "powersave";
@@ -303,7 +303,6 @@ in
   # compatible, in order to avoid breaking some software such as database
   # servers. You should change this only after NixOS release notes say you
   # should.
-  # system.stateVersion = "18.03"; # Did you read the comment? old name
-  system.nixos.stateVersion = "18.03"; # Did you read the comment? new name (after 18.03)
+  system.stateVersion = "18.03";
 
 }
