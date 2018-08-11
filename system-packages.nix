@@ -72,7 +72,6 @@ pkgs: with pkgs; [
   fzf
   stunnel
   ncdu
-  nix-repl
   zip
   wget
   unzip
