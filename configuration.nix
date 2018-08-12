@@ -1,5 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, lib, ... }:
@@ -116,6 +114,9 @@ in
   powerManagement.cpuFreqGovernor = "powersave";
   powerManagement.enable = true;
   powerManagement.powertop.enable = true;
+  powerManagement.resumeCommands = ''
+    ${pkgs.killall}/bin/killall gpg-agent
+  '';
 
   services.syncthing = {
     enable = true;
@@ -250,6 +251,19 @@ in
     '';
   };
 
+  systemd.user.services.dropbox = rec {
+    description = "Dropbox service";
+    enable = true;
+    environment = {
+      DISPLAY = ":0";
+      XAUTHORITY="/home/${meta.userName}/.Xauthority";
+    };
+    script = ''
+      ${pkgs.dropbox}/bin/dropbox
+    '';
+    wantedBy = [ "default.target" ];
+  };
+
   fonts.fonts = with pkgs; [
      google-fonts
      source-code-pro
@@ -260,8 +274,6 @@ in
      powerline-fonts
      roboto
   ];
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
 
   # Make sure the only way to add users/groups is to change this file
   users.mutableUsers = false;
