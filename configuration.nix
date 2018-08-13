@@ -153,6 +153,13 @@ in
   services.xserver.libinput.middleEmulation = true;
   services.xserver.libinput.tapping = true;
   services.xserver.libinput.disableWhileTyping = true;
+  services.xserver.inputClassSections = [ ''
+    Identifier "mouse"
+    Driver "libinput"
+    MatchIsPointer "on"
+    Option "NaturalScrolling" "true"
+    Option "Tapping" "off"
+  '' ];
 
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.sddm.enable = true;
