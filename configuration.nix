@@ -137,7 +137,7 @@ in
   };
 
   # Hide the cursor unless moving it around
-  services.unclutter.enable = true;
+  services.xbanish.enable = true;
 
   # Enable upower
   services.upower.enable = true;
