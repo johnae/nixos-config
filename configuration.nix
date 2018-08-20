@@ -268,7 +268,7 @@ in
     enable = true;
     environment = {
       DISPLAY = ":0";
-      XAUTHORITY="/home/${meta.userName}/.Xauthority";
+      XAUTHORITY="/home/%U/.Xauthority";
     };
     script = ''
       ${pkgs.dropbox}/bin/dropbox
