@@ -263,6 +263,22 @@ in
     '';
   };
 
+  systemd.user.services.pasuspender = rec {
+    description = "Fix PulseAudio after resume from suspend";
+    after = [ "suspend.target" ];
+    enable = true;
+    serviceConfig = {
+      Type = "oneshot";
+    };
+    environment = {
+      XDG_RUNTIME_DIR = "/run/user/%U";
+    };
+    script = ''
+      ${pkgs.pulseaudioFull}/bin/pasuspender ${pkgs.coreutils}/bin/true
+    '';
+    wantedBy = [ "suspend.target" ];
+  };
+
   systemd.user.services.dropbox = rec {
     description = "Dropbox service";
     enable = true;
