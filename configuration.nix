@@ -149,6 +149,9 @@ in
   services.xserver.xkbModel = "pc105";
   services.xserver.xkbOptions = "ctrl:nocaps,lv3:lalt_switch,compose:ralt,lv3:ralt_alt";
 
+  # Video driver
+  services.xserver.videoDrivers = meta.videoDrivers or [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
+
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
   services.xserver.libinput.naturalScrolling = true;

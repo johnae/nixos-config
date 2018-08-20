@@ -12,4 +12,5 @@
   backupSshKey = "/path/to/id_rsa";
   knownHosts = [ { hostNames = [ "[some.example.com]:12345" "[10.10.10.11]:12345" ]; publicKey = "ssh-rsa AAAAB3NzaC1yc2VeryLongKeyHereFollowsAllTheWayUntilTheEnd"; } ];
   kernelParams = []; ## for example [ "btusb.enable_auto_suspend=0" ] is useful on some machines where bluetooth would otherwise die on sleep and never come back up;
+  # videoDrivers = [ "modesetting" ];
 }
