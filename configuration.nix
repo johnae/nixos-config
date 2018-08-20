@@ -88,6 +88,9 @@ in
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  # Enable autorandr (automatic monitor detection)
+  services.autorandr.enable = true;
+
   users.defaultUserShell = pkgs.fish;
 
   # Open ports in the firewall.
@@ -123,7 +126,6 @@ in
     user = "${meta.userName}";
     dataDir = "/home/${meta.userName}/.config/syncthing";
   };
-
 
   # Don't hurt my eyes at night
   services.redshift = {
