@@ -186,6 +186,8 @@ in
   services.compton.backend = "glx";
   services.compton.vSync = "opengl-swc";
   services.compton.fadeDelta = 6;
+  services.compton.opacityRules = [ "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ];
+  services.compton.shadowExclude = [ "name = 'Screenshot'" "class_g = 'slop'" "_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ] ;
   services.compton.fadeSteps = [ "0.08" "0.08" ];
   services.compton.inactiveOpacity = "0.89";
   services.compton.extraOptions = ''
@@ -194,7 +196,6 @@ in
     blur-background-frame = true;
     blur-background-fixed = false;
     blur-background-exclude = [ "window_type = 'dock'", "window_type = 'desktop'", "class_g = 'slop'", "name = 'Screenshot'" ];
-    shadow-exclude = ["name = 'Screenshot'", "class_g = 'slop'"];
     no-fading-openclose = false; # Avoid fade windows in/out when opening/closing.
     mark-wmmin-focused = true;
     mark-ovredir-focused = true;
