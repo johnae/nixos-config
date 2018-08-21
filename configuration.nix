@@ -36,8 +36,8 @@ in
   # Select internationalisation properties.
   i18n = {
     consoleFont = meta.consoleFont;
-    consoleKeyMap = "sv-latin1";
-    defaultLocale = "en_US.UTF-8";
+    consoleKeyMap = meta.consoleKeyMap;
+    defaultLocale = meta.defaultLocale;
   };
 
   # additional fs options
@@ -46,7 +46,7 @@ in
   fileSystems."/var".options = [ "subvol=@var" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
 
   # Set your time zone.
-  time.timeZone = "Europe/Stockholm";
+  time.timeZone = meta.timeZone;
 
   nixpkgs.config.allowUnfree = true;
 
@@ -144,10 +144,10 @@ in
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  services.xserver.layout = "se";
-  services.xserver.xkbVariant = "mac";
-  services.xserver.xkbModel = "pc105";
-  services.xserver.xkbOptions = "ctrl:nocaps,lv3:lalt_switch,compose:ralt,lv3:ralt_alt";
+  services.xserver.layout = meta.xserverLayout;
+  services.xserver.xkbVariant = meta.xserverXkbVariant;
+  services.xserver.xkbModel = meta.xserverXkbModel;
+  services.xserver.xkbOptions = meta.xserverXkbOptions;
 
   # Video driver
   services.xserver.videoDrivers = meta.videoDrivers or [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];

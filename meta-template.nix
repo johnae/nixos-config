@@ -1,6 +1,13 @@
 {
   hostName = "<HOSTNAME>";
   consoleFont = "Lat2-Terminus16";
+  consoleKeyMap = "sv-latin1";
+  defaultLocale = "en_US.UTF-8";
+  timeZone = "Europe/Stockholm";
+  xserverLayout = "se";
+  xserverXkbVariant = "mac";
+  xserverXkbModel = "pc105";
+  xserverXkbOptions = "ctrl:nocaps,lv3:lalt_switch,compose:ralt,lv3:ralt_alt";
   lightdmExtraConfig = "";
   dmBackground = "/home/shared/backgrounds/dark-mountains.png";
   userName = "john";
