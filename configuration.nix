@@ -79,6 +79,7 @@ in
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
   programs.ssh.startAgent = false;
   programs.ssh.knownHosts = meta.knownHosts;
+  programs.fish.enable = true;
 
   services.pcscd.enable = true;
   services.cron.enable = true;
