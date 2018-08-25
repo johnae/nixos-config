@@ -119,7 +119,7 @@ in
   powerManagement.enable = true;
   powerManagement.powertop.enable = true;
   powerManagement.resumeCommands = ''
-    ${pkgs.killall}/bin/killall gpg-agent
+    ${pkgs.killall}/bin/killall -9 gpg-agent
   '';
 
   services.syncthing = {
