@@ -22,6 +22,7 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = meta.kernelParams;
+  boot.extraModulePackages = with config.boot.kernelPackages; [ wireguard ];
 
   hardware.cpu.intel.updateMicrocode = true;
   hardware.opengl.enable = true;
@@ -80,9 +81,31 @@ in
   programs.ssh.startAgent = false;
   programs.ssh.knownHosts = meta.knownHosts;
   programs.fish.enable = true;
+  programs.dconf.enable = true;
 
   services.pcscd.enable = true;
   services.cron.enable = true;
+  services.avahi.enable = true;
+  services.avahi.nssmdns = true;
+  services.flatpak.enable = true;
+
+  security.pam.services.swaylock = {
+    text = ''
+      auth include login
+    '';
+  };
+
+ # services.hydra.enable = true;
+ # services.hydra.hydraURL = http://localhost:8910;
+ # services.hydra.notificationSender = "hydra@insane.se";
+ # services.postgresql.enable = true;
+ # services.postgresql.authentication = lib.mkForce ''
+ #   # Generated file; do not edit!
+ #   # TYPE  DATABASE        USER            ADDRESS                 METHOD
+ #   local   all             all                                     trust
+ #   host    all             all             127.0.0.1/32            trust
+ #   host    all             all             ::1/128                 trust
+ # '';
 
   # List services that you want to enable:
 
@@ -90,7 +113,7 @@ in
   services.openssh.enable = true;
 
   # Enable autorandr (automatic monitor detection)
-  services.autorandr.enable = true;
+  # services.autorandr.enable = true;
 
   users.defaultUserShell = pkgs.fish;
 
@@ -104,6 +127,9 @@ in
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.gutenprint ];
 
+  # Disable suspend on lid close
+  # services.logind.lidSwitch = "ignore";
+
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio = {
@@ -112,7 +138,9 @@ in
   };
   hardware.bluetooth.enable = true;
 
-  services.dbus.packages = [ pkgs.gnome2.GConf pkgs.gnome3.gcr ];
+
+  services.dbus.packages = with pkgs; [ gnome2.GConf gnome3.gcr gnome3.dconf ];
+  services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
   environment.pathsToLink = [ "/etc/gconf" ];
 
   powerManagement.cpuFreqGovernor = "powersave";
@@ -130,6 +158,7 @@ in
 
   # Don't hurt my eyes at night
   services.redshift = {
+    package = pkgs.redshiftwl;
     enable = true;
     latitude = "59.344";
     longitude = "18.045";
@@ -144,28 +173,28 @@ in
   services.upower.enable = true;
 
   # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  services.xserver.layout = meta.xserverLayout;
-  services.xserver.xkbVariant = meta.xserverXkbVariant;
-  services.xserver.xkbModel = meta.xserverXkbModel;
-  services.xserver.xkbOptions = meta.xserverXkbOptions;
+  # services.xserver.enable = true;
+  # services.xserver.layout = meta.xserverLayout;
+  # services.xserver.xkbVariant = meta.xserverXkbVariant;
+  # services.xserver.xkbModel = meta.xserverXkbModel;
+  # services.xserver.xkbOptions = meta.xserverXkbOptions;
 
   # Video driver
-  services.xserver.videoDrivers = meta.videoDrivers or [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
+  # services.xserver.videoDrivers = meta.videoDrivers or [ "ati" "cirrus" "intel" "vesa" "vmware" "modesetting" ];
 
   # Enable touchpad support.
-  services.xserver.libinput.enable = true;
-  services.xserver.libinput.naturalScrolling = true;
-  services.xserver.libinput.middleEmulation = true;
-  services.xserver.libinput.tapping = true;
-  services.xserver.libinput.disableWhileTyping = true;
-  services.xserver.inputClassSections = [ ''
-    Identifier "mouse"
-    Driver "libinput"
-    MatchIsPointer "on"
-    Option "NaturalScrolling" "true"
-    Option "Tapping" "off"
-  '' ];
+  # services.xserver.libinput.enable = true;
+  # services.xserver.libinput.naturalScrolling = true;
+  # services.xserver.libinput.middleEmulation = true;
+  # services.xserver.libinput.tapping = true;
+  # services.xserver.libinput.disableWhileTyping = true;
+  # services.xserver.inputClassSections = [ ''
+  #   Identifier "mouse"
+  #   Driver "libinput"
+  #   MatchIsPointer "on"
+  #   Option "NaturalScrolling" "true"
+  #   Option "Tapping" "off"
+  # '' ];
 
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.sddm.enable = true;
@@ -175,55 +204,55 @@ in
   # don't know how to disable that through nix yet - and why even use gdm when
   # I'm not that fond of gnome3 anyway.
   # services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.displayManager.lightdm.background = meta.dmBackground;
-  services.xserver.displayManager.lightdm.greeters.gtk.theme.name = "Adapta-Nokto";
-  services.xserver.displayManager.lightdm.greeters.gtk.theme.package = pkgs.adapta-gtk-theme;
-  services.xserver.displayManager.lightdm.greeters.gtk.indicators = [ "~spacer" "~spacer" "~session" "~power" ];
-  services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = meta.lightdmExtraConfig;
+  # services.xserver.displayManager.lightdm.enable = true;
+  # services.xserver.displayManager.lightdm.background = meta.dmBackground;
+  # services.xserver.displayManager.lightdm.greeters.gtk.theme.name = "Adapta-Nokto";
+  # services.xserver.displayManager.lightdm.greeters.gtk.theme.package = pkgs.adapta-gtk-theme;
+  # services.xserver.displayManager.lightdm.greeters.gtk.indicators = [ "~spacer" "~spacer" "~session" "~power" ];
+  # services.xserver.displayManager.lightdm.greeters.gtk.extraConfig = meta.lightdmExtraConfig;
 
-  services.compton.enable = true;
-  services.compton.fade = true;
-  services.compton.backend = "glx";
-  services.compton.vSync = "opengl-swc";
-  services.compton.fadeDelta = 6;
-  services.compton.opacityRules = [ "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ];
-  services.compton.shadowExclude = [ "name = 'Screenshot'" "class_g = 'slop'" "_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ] ;
-  services.compton.fadeSteps = [ "0.08" "0.08" ];
-  services.compton.inactiveOpacity = "0.89";
-  services.compton.extraOptions = ''
-    inactive-dim = 0.3;
-    blur-background = true;
-    blur-background-frame = true;
-    blur-background-fixed = false;
-    blur-background-exclude = [ "window_type = 'dock'", "window_type = 'desktop'", "class_g = 'slop'", "name = 'Screenshot'" ];
-    no-fading-openclose = false; # Avoid fade windows in/out when opening/closing.
-    mark-wmmin-focused = true;
-    mark-ovredir-focused = true;
-    detect-rounded-corners = true;
-    unredir-if-possible = true;
-    detect-transient = true;
-    glx-no-stencil = true;
-    glx-no-rebind-pixmap = true;
-  '';
+  # services.compton.enable = true;
+  # services.compton.fade = true;
+  # services.compton.backend = "glx";
+  # services.compton.vSync = "opengl-swc";
+  # services.compton.fadeDelta = 6;
+  # services.compton.opacityRules = [ "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ];
+  # services.compton.shadowExclude = [ "name = 'Screenshot'" "class_g = 'slop'" "_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'" ] ;
+  # services.compton.fadeSteps = [ "0.08" "0.08" ];
+  # services.compton.inactiveOpacity = "0.89";
+  # services.compton.extraOptions = ''
+  #   inactive-dim = 0.3;
+  #   blur-background = true;
+  #   blur-background-frame = true;
+  #   blur-background-fixed = false;
+  #   blur-background-exclude = [ "window_type = 'dock'", "window_type = 'desktop'", "class_g = 'slop'", "name = 'Screenshot'" ];
+  #   no-fading-openclose = false; # Avoid fade windows in/out when opening/closing.
+  #   mark-wmmin-focused = true;
+  #   mark-ovredir-focused = true;
+  #   detect-rounded-corners = true;
+  #   unredir-if-possible = true;
+  #   detect-transient = true;
+  #   glx-no-stencil = true;
+  #   glx-no-rebind-pixmap = true;
+  # '';
 
-  services.xserver.windowManager.i3.enable = true;
-  services.xserver.windowManager.i3.extraSessionCommands = ''
-    export QT_STYLE_OVERRIDE=gtk
-    export VISUAL=edit
-    export EDITOR=$VISUAL
-    export PROJECTS=~/Development
-    if [ -e .config/syncthing/config.xml ]; then
-       SYNCTHING_API_KEY=$(cat .config/syncthing/config.xml | grep apikey | awk -F">|</" '{print $2}')
-       if [ "$SYNCTHING_API_KEY" != "" ]; then
-          export SYNCTHING_API_KEY
-       fi
-    fi
-    # Load X resources.
-    if [ -e $HOME/.Xresources ]; then
-        ${pkgs.xorg.xrdb}/bin/xrdb -merge $HOME/.Xresources
-    fi
-  '';
+  # services.xserver.windowManager.i3.enable = true;
+  # services.xserver.windowManager.i3.extraSessionCommands = ''
+  #   export QT_STYLE_OVERRIDE=gtk
+  #   export VISUAL=ed
+  #   export EDITOR=$VISUAL
+  #   export PROJECTS=~/Development
+  #   if [ -e .config/syncthing/config.xml ]; then
+  #      SYNCTHING_API_KEY=$(cat .config/syncthing/config.xml | grep apikey | awk -F">|</" '{print $2}')
+  #      if [ "$SYNCTHING_API_KEY" != "" ]; then
+  #         export SYNCTHING_API_KEY
+  #      fi
+  #   fi
+  #   # Load X resources.
+  #   if [ -e $HOME/.Xresources ]; then
+  #       ${pkgs.xorg.xrdb}/bin/xrdb -merge $HOME/.Xresources
+  #   fi
+  # '';
 
 
   # want to run this not on an OnCalendar spec but rather on certain system events
@@ -240,10 +269,10 @@ in
 
   systemd.services.rbsnapper = rec {
     description = "Snapshot and remote backup of /home to ${meta.backupDestination}";
-    environment = {
-      DISPLAY = ":0";
-      XAUTHORITY="/home/${meta.userName}/.Xauthority";
-    };
+    #environment = {
+    #  DISPLAY = ":0";
+    #  XAUTHORITY="/home/${meta.userName}/.Xauthority";
+    #};
     preStart = ''
       ${pkgs.udev}/bin/systemctl set-environment BACKUP_STARTED_AT=$(${pkgs.coreutils}/bin/date +%s)
     '';
@@ -253,14 +282,17 @@ in
                                        ${pkgs.btr-snap}/bin/btr-snap /home ${meta.backupDestination} ${meta.backupPort} ${meta.backupSshKey}
     '';
     postStop = ''
+      if [ -e /run/user/1337/env-vars ]; then
+         source /run/user/1337/env-vars
+      fi
       BACKUP_ENDED_AT=$(${pkgs.coreutils}/bin/date +%s)
       BACKUP_DURATION=$(($BACKUP_ENDED_AT - $BACKUP_STARTED_AT))
       if [ "$EXIT_STATUS" = "0" ]; then
-         ${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/cloud-computing-3.svg \
-                                                      Backup "Completed ${lib.toLower description} in $BACKUP_DURATION"s.
+         ${pkgs.busybox}/bin/su $USER -s /bin/sh -c "${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/cloud-computing-3.svg \
+                                                      Backup \"Completed ${lib.toLower description} in $BACKUP_DURATION\"s."
       else
-         ${pkgs.notify-desktop}/bin/notify-desktop -u critical -i /home/shared/icons/error.svg \
-                                                      Backup "Failed ${lib.toLower description} after $BACKUP_DURATION"s.
+         ${pkgs.busybox}/bin/su $USER -s /bin/sh -c "${pkgs.notify-desktop}/bin/notify-desktop -u critical -i /home/shared/icons/error.svg \
+                                                      Backup \"Failed ${lib.toLower description} after $BACKUP_DURATION\"s."
       fi;
     '';
   };
@@ -281,18 +313,18 @@ in
     wantedBy = [ "suspend.target" ];
   };
 
-  systemd.user.services.dropbox = rec {
-    description = "Dropbox service";
-    enable = true;
-    environment = {
-      DISPLAY = ":0";
-      XAUTHORITY="/home/%U/.Xauthority";
-    };
-    script = ''
-      ${pkgs.dropbox}/bin/dropbox
-    '';
-    wantedBy = [ "default.target" ];
-  };
+  #systemd.user.services.dropbox = rec {
+  #  description = "Dropbox service";
+  #  enable = true;
+  #  environment = {
+  #    DISPLAY = ":0";
+  #    XAUTHORITY="/home/%U/.Xauthority";
+  #  };
+  #  script = ''
+  #    ${pkgs.dropbox}/bin/dropbox
+  #  '';
+  #  wantedBy = [ "default.target" ];
+  #};
 
   fonts.fonts = with pkgs; [
      google-fonts
@@ -303,6 +335,8 @@ in
      font-droid
      powerline-fonts
      roboto
+     fira-code
+     fira-code-symbols
   ];
 
   # Make sure the only way to add users/groups is to change this file

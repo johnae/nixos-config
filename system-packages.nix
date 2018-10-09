@@ -1,8 +1,6 @@
 pkgs: with pkgs; [
   man-pages
 
-  dropbox
-
   spotify
   mpv
   vlc
@@ -110,6 +108,7 @@ pkgs: with pkgs; [
   gsimplecal
   gnome3.nautilus
   gnome3.sushi
+  gnome3.dconf-editor
   lxappearance
   feh
 
@@ -119,8 +118,7 @@ pkgs: with pkgs; [
   bluez-tools
   fd
   unrar
+  wireguard
 
-  spook
   alacritty
-  fire
 ]
