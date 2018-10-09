@@ -109,6 +109,7 @@ pkgs: with pkgs; [
   gnome3.nautilus
   gnome3.sushi
   gnome3.dconf-editor
+  gnome3.dconf
   lxappearance
   feh
 
