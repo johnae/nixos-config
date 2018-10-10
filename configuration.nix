@@ -88,6 +88,7 @@ in
   services.avahi.enable = true;
   services.avahi.nssmdns = true;
   services.flatpak.enable = true;
+  services.gnome3.gnome-keyring.enable = true;
 
   security.pam.services.swaylock = {
     text = ''
@@ -338,6 +339,9 @@ in
      fira-code
      fira-code-symbols
   ];
+
+  # Gnome keyring yes please - also see the service
+  security.pam.services."${meta.userName}".enableGnomeKeyring = true;
 
   # Make sure the only way to add users/groups is to change this file
   users.mutableUsers = false;
