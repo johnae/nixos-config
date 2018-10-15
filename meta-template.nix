@@ -4,15 +4,8 @@
   consoleKeyMap = "sv-latin1";
   defaultLocale = "en_US.UTF-8";
   timeZone = "Europe/Stockholm";
-  xserverLayout = "se";
-  xserverXkbVariant = "mac";
-  xserverXkbModel = "pc105";
-  xserverXkbOptions = "ctrl:nocaps,lv3:lalt_switch,compose:ralt,lv3:ralt_alt";
-  lightdmExtraConfig = "";
-  dmBackground = "/home/shared/backgrounds/dark-mountains.png";
   userName = "john";
   userDescription = "John Axel Eriksson";
-  userIcon = "/var/lib/AccountsService/icons/earth.png";
   userPassword = "<PASSWORD>"; # mkpasswd -m sha-512 -s <<< the-password-here
   backupDestination = "user@some.example.com";
   backupPort = "12345";

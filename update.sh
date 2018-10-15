@@ -4,11 +4,11 @@ PREFIX=$1
 DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
 SUDO=
 if [ "$(id -u)" != "0" ]; then
-	SUDO=sudo
+  SUDO=sudo
 fi
 
 FILES="configuration.nix system-packages.nix meta.nix"
-DIRECTORIES="overlays packages shared user-icons"
+DIRECTORIES="overlays packages"
 
 OIFS=$IFS
 IFS=" "
