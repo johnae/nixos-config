@@ -3,6 +3,7 @@
 let
   meta = import ./meta.nix;
   stdenv = pkgs.stdenv;
+  clr = c: x: ''<span foreground='${c}'>${x}</span>'';
 
 in
 
@@ -40,9 +41,14 @@ in
   i18n.defaultLocale = meta.defaultLocale;
 
   # additional fs options
-  fileSystems."/".options = [ "subvol=@" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
-  fileSystems."/home".options = [ "subvol=@home" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
-  fileSystems."/var".options = [ "subvol=@var" "rw" "noatime" "compress=zstd" "ssd" "space_cache" ];
+  fileSystems."/".options = [ "subvol=@" "rw" "noatime"
+                              "compress=zstd" "ssd" "space_cache" ];
+
+  fileSystems."/home".options = [ "subvol=@home" "rw" "noatime"
+                                  "compress=zstd" "ssd" "space_cache" ];
+
+  fileSystems."/var".options = [ "subvol=@var" "rw" "noatime"
+                                 "compress=zstd" "ssd" "space_cache" ];
 
   time.timeZone = meta.timeZone;
 
@@ -113,32 +119,43 @@ in
 
     timerConfig = {
       OnBootSec = "5m"; # always run rbsnapper 5 minutes after boot
-      OnUnitInactiveSec = "30m"; # run rbsnapper 30 minutes after it last finished
+      OnUnitInactiveSec = "30m"; # run rbsnapper 30 minutes after last run
     };
   };
 
   systemd.services.rbsnapper = rec {
-    description = "Snapshot and remote backup of /home to ${meta.backupDestination}";
-    preStart = ''
-      ${pkgs.udev}/bin/systemctl set-environment BACKUP_STARTED_AT=$(${pkgs.coreutils}/bin/date +%s)
+
+    description = with meta;
+       "Snapshot and remote backup of /home to ${backupDestination}";
+
+    preStart = with pkgs; ''
+      ${udev}/bin/systemctl set-environment \
+        STARTED_AT=$(${coreutils}/bin/date +%s)
     '';
-    script = ''
-      ${pkgs.udev}/bin/systemd-inhibit --what="idle:shutdown:sleep" \
-                                       --who="btr-snap" --why="Backing up /home" --mode=block \
-                                       ${pkgs.btr-snap}/bin/btr-snap /home ${meta.backupDestination} ${meta.backupPort} ${meta.backupSshKey}
+
+    script = with meta; with pkgs; ''
+      ${udev}/bin/systemd-inhibit \
+        --what="idle:shutdown:sleep" \
+        --who="btr-snap" --why="Backing up /home" --mode=block \
+          ${btr-snap}/bin/btr-snap /home \
+            ${backupDestination} ${backupPort} ${backupSshKey}
     '';
-    postStop = ''
+
+    postStop = with lib; with pkgs; ''
       if [ -e /run/user/1337/env-vars ]; then
          source /run/user/1337/env-vars
       fi
-      BACKUP_ENDED_AT=$(${pkgs.coreutils}/bin/date +%s)
-      BACKUP_DURATION=$(($BACKUP_ENDED_AT - $BACKUP_STARTED_AT))
+      ENDED_AT=$(${coreutils}/bin/date +%s)
+      DURATION=$(($ENDED_AT - $STARTED_AT))
+      NOTIFY="${notify-desktop}/bin/notify-desktop"
       if [ "$EXIT_STATUS" = "0" ]; then
-         ${pkgs.busybox}/bin/su $USER -s /bin/sh -c "${pkgs.notify-desktop}/bin/notify-desktop -i /home/shared/icons/cloud-computing-3.svg \
-                                                      Backup \"Completed ${lib.toLower description} in $BACKUP_DURATION\"s."
+         MSG="${clr "green" "Completed"} ${toLower description} in $DURATION"s.
+         ${busybox}/bin/su $USER -s /bin/sh -c \
+           "$NOTIFY \"Backup\" \"$MSG\""
       else
-         ${pkgs.busybox}/bin/su $USER -s /bin/sh -c "${pkgs.notify-desktop}/bin/notify-desktop -u critical -i /home/shared/icons/error.svg \
-                                                      Backup \"Failed ${lib.toLower description} after $BACKUP_DURATION\"s."
+         MSG="${clr "red" "Failed"} ${toLower description} after $DURATION"s.
+         ${busybox}/bin/su $USER -s /bin/sh -c \
+           "$NOTIFY -u critical \"Backup\" \"$MSG\""
       fi;
     '';
   };
