@@ -3,7 +3,10 @@
 let
   meta = import ./meta.nix;
   stdenv = pkgs.stdenv;
-  clr = c: x: ''<span foreground='${c}'>${x}</span>'';
+  pango = attrs: str:
+        "<span " +
+        (lib.concatStringsSep " " (lib.mapAttrsToList (name: value: '' ${name}='${value}' '') attrs)) +
+        ">" + str + "</span>";
 
 in
 
@@ -34,7 +37,7 @@ in
   networking.hostName = meta.hostName;
   networking.extraHosts = "127.0.1.1 ${meta.hostName}";
   networking.wireless.enable = true;
-  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+  networking.nameservers = [ "1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" ];
 
   i18n.consoleFont = meta.consoleFont;
   i18n.consoleKeyMap = meta.consoleKeyMap;
@@ -81,19 +84,27 @@ in
   programs.ssh.knownHosts = meta.knownHosts;
   programs.fish.enable = true;
   programs.dconf.enable = true;
+  programs.light.enable = true;
 
   services.pcscd.enable = true;
   services.cron.enable = true;
   services.avahi.enable = true;
   services.avahi.nssmdns = true;
-  services.flatpak.enable = true;
   services.gnome3.gnome-keyring.enable = true;
+  services.gnome3.sushi.enable = true;
+  services.gnome3.gvfs.enable = true;
   services.openssh.enable = true;
+
+  services.pgmanage.enable = true;
+  services.pgmanage.allowCustomConnections = true;
+  services.pgmanage.connections = {
+    default-local-server = "hostaddr=127.0.0.1 port=5432 dbname=postgres";
+  };
 
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.gutenprint ];
 
-  services.dbus.packages = with pkgs; [ gnome2.GConf gnome3.gcr gnome3.dconf ];
+  services.dbus.packages = with pkgs; [ gnome2.GConf gnome3.gcr gnome3.dconf gnome3.sushi ];
   services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
 
   services.syncthing = {
@@ -149,11 +160,11 @@ in
       DURATION=$(($ENDED_AT - $STARTED_AT))
       NOTIFY="${notify-desktop}/bin/notify-desktop"
       if [ "$EXIT_STATUS" = "0" ]; then
-         MSG="${clr "green" "Completed"} ${toLower description} in $DURATION"s.
+         MSG="${pango { font_weight = "bold"; } "Completed"} ${toLower description} in $DURATION"s.
          ${busybox}/bin/su $USER -s /bin/sh -c \
            "$NOTIFY \"Backup\" \"$MSG\""
       else
-         MSG="${clr "red" "Failed"} ${toLower description} after $DURATION"s.
+         MSG="${pango { font_weight = "bold"; } "Failed" } ${toLower description} after $DURATION"s.
          ${busybox}/bin/su $USER -s /bin/sh -c \
            "$NOTIFY -u critical \"Backup\" \"$MSG\""
       fi;
