@@ -96,12 +96,6 @@ in
   services.gnome3.gvfs.enable = true;
   services.openssh.enable = true;
 
-  services.pgmanage.enable = true;
-  services.pgmanage.allowCustomConnections = true;
-  services.pgmanage.connections = {
-    default-local-server = "hostaddr=127.0.0.1 port=5432 dbname=postgres";
-  };
-
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.gutenprint ];
 
