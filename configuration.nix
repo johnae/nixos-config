@@ -12,8 +12,8 @@ in
 
 {
   imports =
-    [ ./hardware-configuration.nix
-      ./wifi-configuration.nix
+    [
+      ./hardware-configuration.nix
     ];
 
   boot.loader.systemd-boot.enable = true;
@@ -36,7 +36,7 @@ in
 
   networking.hostName = meta.hostName;
   networking.extraHosts = "127.0.1.1 ${meta.hostName}";
-  networking.wireless.enable = true;
+  networking.wireless.iwd.enable = true;
   networking.nameservers = [ "1.0.0.1" "1.1.1.1" "2606:4700:4700::1111" ];
 
   i18n.consoleFont = meta.consoleFont;
