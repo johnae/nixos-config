@@ -191,6 +191,7 @@ in
   fonts.fonts = with pkgs; [
      google-fonts
      source-code-pro
+     office-code-pro-font
      system-san-francisco-font
      san-francisco-mono-font
      font-awesome_4
