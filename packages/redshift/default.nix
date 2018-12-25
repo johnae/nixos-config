@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "minus7";
     repo = "redshift";
-    rev = "a2177ed9942477868ccc514372f32a0fbcbe189e";
+    rev = "420d0d534c9f03abc4d634a7d3d7629caf29b4b6";
     sha256 = "1ka8gjjddkjvcxnnyk9y9rqj1askjcf6ikajyh7a7wfj6z5j9c2j";
   };
 
