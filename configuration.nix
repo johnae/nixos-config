@@ -78,6 +78,7 @@ in
   '';
 
   virtualisation.docker.enable = true;
+  virtualisation.libvirtd.enable = true;
 
   programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
   programs.ssh.startAgent = false;
@@ -213,7 +214,7 @@ in
   users.extraUsers."${meta.userName}" = {
     isNormalUser = true;
     uid = 1337;
-    extraGroups = [ "wheel" "docker" "video" "audio" ];
+    extraGroups = [ "wheel" "docker" "video" "audio" "libvirtd" ];
     description = meta.userDescription;
     shell = pkgs.fish;
     hashedPassword = meta.userPassword;
