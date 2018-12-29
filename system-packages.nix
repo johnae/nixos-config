@@ -46,4 +46,5 @@ pkgs: with pkgs; [
   fd
   unrar
   wireguard
+  iwd
 ]

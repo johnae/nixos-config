@@ -79,7 +79,8 @@ in
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
 
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  programs.gnupg.agent.enable = true;
+  programs.gnupg.agent.enableSSHSupport = true;
   programs.ssh.startAgent = false;
   programs.ssh.knownHosts = meta.knownHosts;
   programs.fish.enable = true;
@@ -115,7 +116,6 @@ in
   };
 
   services.redshift = {
-    package = pkgs.redshiftwl;
     enable = true;
     latitude = "59.344";
     longitude = "18.045";
