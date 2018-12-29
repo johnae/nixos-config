@@ -72,12 +72,8 @@ in
   environment.shells = [ pkgs.bashInteractive pkgs.zsh pkgs.fish ];
   environment.pathsToLink = [ "/etc/gconf" ];
 
-  powerManagement.cpuFreqGovernor = "powersave";
   powerManagement.enable = true;
   powerManagement.powertop.enable = true;
-  powerManagement.resumeCommands = ''
-    ${pkgs.killall}/bin/killall -9 gpg-agent
-  '';
 
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
@@ -103,6 +99,13 @@ in
 
   services.dbus.packages = with pkgs; [ gnome2.GConf gnome3.gcr gnome3.dconf gnome3.sushi ];
   services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
+
+  services.logind.lidSwitch = "suspend-then-hibernate";
+
+  systemd.additionalUpstreamSystemUnits = [
+           "suspend-then-hibernate.target"
+           "systemd-suspend-then-hibernate.service"
+         ];
 
   services.syncthing = {
     enable = true;
@@ -166,6 +169,22 @@ in
            "$NOTIFY -u critical \"Backup\" \"$MSG\""
       fi;
     '';
+  };
+
+  systemd.services.disable-usb-wakeup = rec {
+    description = "Disable USB wakeup";
+    enable = true;
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+    };
+    script = ''
+      echo XHC > /proc/acpi/wakeup
+    '';
+    postStop = ''
+      echo XHC > /proc/acpi/wakeup
+    '';
+    wantedBy = [ "multi-user.target" ];
   };
 
   systemd.user.services.pasuspender = rec {
