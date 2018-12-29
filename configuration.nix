@@ -22,6 +22,8 @@ in
   boot.kernelParams = meta.kernelParams;
   boot.extraModulePackages = with config.boot.kernelPackages; [ wireguard ];
 
+  boot.kernel.sysctl = meta.sysctl;
+
   hardware.cpu.intel.updateMicrocode = true;
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
