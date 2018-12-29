@@ -27,13 +27,14 @@ in
   hardware.cpu.intel.updateMicrocode = true;
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
+  hardware.opengl.driSupport32Bit = true;
   hardware.u2f.enable = true;
 
   sound.enable = true;
-  hardware.pulseaudio = {
-    enable = true;
-    package = pkgs.pulseaudioFull;
-  };
+  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio.package = pkgs.pulseaudioFull;
+  hardware.pulseaudio.support32Bit = true;
+
   hardware.bluetooth.enable = true;
 
   networking.hostName = meta.hostName;
