@@ -16,6 +16,17 @@ in
       ./hardware-configuration.nix
     ];
 
+  nix = {
+    binaryCaches = [
+      "https://cache.nixos.org/"
+      "https://insane.cachix.org"
+    ];
+    binaryCachePublicKeys = [
+      "insane.cachix.org-1:q+g7t6VC68aJRn4OZn/D3THYBLjZ1vGQrdPtL1HHYjQ="
+    ];
+    trustedUsers = [ "root" "john" ];
+  };
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -211,7 +222,6 @@ in
      system-san-francisco-font
      san-francisco-mono-font
      font-awesome_4
-     font-droid
      powerline-fonts
      roboto
      fira-code
