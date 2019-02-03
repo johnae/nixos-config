@@ -224,6 +224,7 @@ in
      system-san-francisco-font
      san-francisco-mono-font
      font-awesome_4
+     font-awesome_5
      powerline-fonts
      roboto
      fira-code
