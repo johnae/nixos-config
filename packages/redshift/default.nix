@@ -2,8 +2,6 @@
 , libtool, pkgconfig, wrapGAppsHook, wrapPython, gobjectIntrospection
 , gtk3, python, pygobject3, hicolor-icon-theme, pyxdg
 
-, withCoreLocation ? stdenv.isDarwin, CoreLocation, Foundation, Cocoa
-, withQuartz ? stdenv.isDarwin, ApplicationServices
 , withRandr ? stdenv.isLinux, libxcb
 , withDrm ? stdenv.isLinux, libdrm
 , withWayland ? stdenv.isLinux, wayland, wayland-protocols
@@ -17,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "minus7";
     repo = "redshift";
     rev = "420d0d534c9f03abc4d634a7d3d7629caf29b4b6";
-    sha256 = "1ka8gjjddkjvcxnnyk9y9rqj1askjcf6ikajyh7a7wfj6z5j9c2j";
+    sha256 = "12dwb96i4pbny5s64k6k4f8k936xa41zvcjhv54wv0ax471ymls7";
   };
 
   patches = [
@@ -37,11 +35,11 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--enable-randr=${if withRandr then "yes" else "no"}"
+    "--enable-randr=no"
     "--enable-geoclue2=${if withGeoclue then "yes" else "no"}"
     "--enable-drm=${if withDrm then "yes" else "no"}"
-    "--enable-quartz=${if withQuartz then "yes" else "no"}"
-    "--enable-corelocation=${if withCoreLocation then "yes" else "no"}"
+    "--enable-quartz=no"
+    "--enable-corelocation=no"
     "--enable-wayland=${if withWayland then "yes" else "no"}"
   ];
 
@@ -54,8 +52,6 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional  withGeoclue      geoclue
     ++ stdenv.lib.optional  withDrm          libdrm
     ++ stdenv.lib.optional  withWayland      [ wayland wayland-protocols ]
-    ++ stdenv.lib.optional  withQuartz       ApplicationServices
-    ++ stdenv.lib.optionals withCoreLocation [ CoreLocation Foundation Cocoa ]
     ;
 
   pythonPath = [ pygobject3 pyxdg ];

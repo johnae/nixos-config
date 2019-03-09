@@ -128,12 +128,24 @@ in
     dataDir = "/home/${meta.userName}/.config/syncthing";
   };
 
-  services.redshift = {
+  ## the NixOS module doesn't work THAT well when using a package with wayland support
+  ## + logging in from the console (eg. no graphical.target)
+  systemd.user.services.redshift =
+  {
+    description = "Redshift color temperature adjuster";
+    wantedBy = [ "default.target" ];
     enable = true;
-    latitude = "59.344";
-    longitude = "18.045";
-    temperature.day = 6500;
-    temperature.night = 2700;
+    serviceConfig = {
+      ExecStart = ''
+        ${pkgs.redshift-wl}/bin/redshift \
+          -l 59.344:18.045 \
+          -t 6500:2700 \
+          -b 1:1 \
+          -m wayland
+      '';
+      RestartSec = 3;
+      Restart = "always";
+    };
   };
 
   services.upower.enable = true;
