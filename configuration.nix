@@ -16,20 +16,10 @@ in
       ./hardware-configuration.nix
     ];
 
-  nix = {
-    binaryCaches = [
-      "https://cache.nixos.org/"
-      "https://insane.cachix.org"
-    ];
-    binaryCachePublicKeys = [
-      "insane.cachix.org-1:q+g7t6VC68aJRn4OZn/D3THYBLjZ1vGQrdPtL1HHYjQ="
-    ];
-    trustedUsers = [ "root" "john" ];
-  };
-
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.kernelPackages = pkgs.linuxPackages_latest;
+  #boot.kernelPackages = pkgs.linuxPackages_4_20;
   boot.kernelParams = meta.kernelParams;
   boot.extraModulePackages = with config.boot.kernelPackages; [ wireguard ];
 
@@ -240,6 +230,7 @@ in
      roboto
      fira-code
      fira-code-symbols
+     nerdfonts
   ];
 
   security.pam.services."${meta.userName}".enableGnomeKeyring = true;
