@@ -16,9 +16,11 @@ in
       ./hardware-configuration.nix
     ];
 
+  nix.trustedUsers = [ "root" "${meta.userName}" ];
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  #boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   #boot.kernelPackages = pkgs.linuxPackages_4_20;
   boot.kernelParams = meta.kernelParams;
   boot.extraModulePackages = with config.boot.kernelPackages; [ wireguard ];
