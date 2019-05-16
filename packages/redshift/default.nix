@@ -7,16 +7,14 @@
 , withWayland ? stdenv.isLinux, wayland, wayland-protocols
 , withGeoclue ? stdenv.isLinux, geoclue }:
 
+let
+  metadata = builtins.fromJSON(builtins.readFile ./metadata.json);
+in
 stdenv.mkDerivation rec {
   name = "redshift-${version}";
   version = "1.12";
 
-  src = fetchFromGitHub {
-    owner = "minus7";
-    repo = "redshift";
-    rev = "420d0d534c9f03abc4d634a7d3d7629caf29b4b6";
-    sha256 = "12dwb96i4pbny5s64k6k4f8k936xa41zvcjhv54wv0ax471ymls7";
-  };
+  src = fetchFromGitHub metadata;
 
   patches = [
     # https://github.com/jonls/redshift/pull/575
