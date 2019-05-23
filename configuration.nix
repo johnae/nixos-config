@@ -8,13 +8,15 @@ let
         (lib.concatStringsSep " " (lib.mapAttrsToList (name: value: '' ${name}='${value}' '') attrs)) +
         ">" + str + "</span>";
 
+  filesIfExist = with builtins; files:
+     filter (file: pathExists file) files;
+
 in
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+  ] ++ filesIfExist [ ./wireguard.nix ];
 
   nix.trustedUsers = [ "root" "${meta.userName}" ];
 
@@ -120,8 +122,10 @@ in
     dataDir = "/home/${meta.userName}/.config/syncthing";
   };
 
-  ## the NixOS module doesn't work THAT well when using a package with wayland support
-  ## + logging in from the console (eg. no graphical.target)
+  ## the NixOS module doesn't work well when logging in from console
+  ## which is the case when running sway - a wayland compositor (eg. no x11 yay)
+  ## actually - the redshift package (see below) is a patched version that works
+  ## with wayland
   systemd.user.services.redshift =
   {
     description = "Redshift color temperature adjuster";
@@ -189,6 +193,7 @@ in
     '';
   };
 
+  ## usb devices can interfere with sleep without the below
   systemd.services.disable-usb-wakeup = rec {
     description = "Disable USB wakeup";
     enable = true;

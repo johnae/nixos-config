@@ -1,3 +1,4 @@
 wifi-configuration.nix
 meta.nix
 wireguard.nix
+wireguard.json
