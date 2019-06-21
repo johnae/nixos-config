@@ -70,13 +70,6 @@ in
 
   environment.systemPackages = import ./system-packages.nix pkgs;
 
-  environment.shellInit = ''
-    gpg-connect-agent /bye
-    export GPG_TTY=$(tty)
-    export GPG_AGENT_INFO=$(gpgconf --list-dirs agent-socket)
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-  '';
-
   environment.shells = [ pkgs.bashInteractive pkgs.zsh pkgs.fish ];
   environment.pathsToLink = [ "/etc/gconf" ];
 
@@ -88,11 +81,17 @@ in
 
   programs.gnupg.agent.enable = true;
   programs.gnupg.agent.enableSSHSupport = true;
+  programs.gnupg.dirmngr.enable = true;
+
   programs.ssh.startAgent = false;
   programs.ssh.knownHosts = meta.knownHosts;
+
   programs.fish.enable = true;
   programs.dconf.enable = true;
   programs.light.enable = true;
+
+  services.kbfs.enable = true;
+  services.keybase.enable = true;
 
   services.pcscd.enable = true;
   services.cron.enable = true;
