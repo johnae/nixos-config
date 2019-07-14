@@ -183,11 +183,11 @@ in
       if [ "$EXIT_STATUS" = "0" ]; then
          MSG="${pango { font_weight = "bold"; } "Completed"} ${toLower description} in $DURATION"s.
          ${busybox}/bin/su $USER -s /bin/sh -c \
-           "$NOTIFY \"Backup\" \"$MSG\""
+           "$NOTIFY -i emblem-insync-syncing \"Backup\" \"$MSG\""
       else
          MSG="${pango { font_weight = "bold"; } "Failed" } ${toLower description} after $DURATION"s.
          ${busybox}/bin/su $USER -s /bin/sh -c \
-           "$NOTIFY -u critical \"Backup\" \"$MSG\""
+           "$NOTIFY -i dialog-error -u critical \"Backup\" \"$MSG\""
       fi;
     '';
   };
