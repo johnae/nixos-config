@@ -118,6 +118,7 @@ in
   services.syncthing = {
     enable = true;
     user = "${meta.userName}";
+    group = "${meta.userName}";
     dataDir = "/home/${meta.userName}/.config/syncthing";
   };
 
