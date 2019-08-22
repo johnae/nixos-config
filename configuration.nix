@@ -97,9 +97,9 @@ in
   services.cron.enable = true;
   services.avahi.enable = true;
   services.avahi.nssmdns = true;
+  services.gvfs.enable = true;
   services.gnome3.gnome-keyring.enable = true;
   services.gnome3.sushi.enable = true;
-  services.gnome3.gvfs.enable = true;
   services.openssh.enable = true;
 
   services.printing.enable = true;
@@ -120,6 +120,7 @@ in
     user = "${meta.userName}";
     group = "${meta.userName}";
     dataDir = "/home/${meta.userName}/.config/syncthing";
+    openDefaultPorts = true;
   };
 
   ## the NixOS module doesn't work well when logging in from console
