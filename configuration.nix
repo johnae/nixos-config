@@ -109,11 +109,7 @@ in
   services.udev.packages = with pkgs; [ gnome3.gnome-settings-daemon ];
 
   services.logind.lidSwitch = "suspend-then-hibernate";
-
-  systemd.additionalUpstreamSystemUnits = [
-           "suspend-then-hibernate.target"
-           "systemd-suspend-then-hibernate.service"
-         ];
+  environment.etc."systemd/sleep.conf".text = "HibernateDelaySec=8h";
 
   services.syncthing = {
     enable = true;
