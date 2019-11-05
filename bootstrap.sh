@@ -13,13 +13,7 @@ DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
 
 # set -x
 
-## Generally this should really be /dev/random as that will be cryptographically
-## of high quality, however for testing purposes I allow it to be overridden.
-## Just don't do this unless you have a good reason. For example, in a VM when
-## testing the install script, it may be beneficial to use urandom instead as
-## it will likely generate entropy properly as opposed to random.
-
-DEVRANDOM=${DEVRANDOM:-/dev/random}
+DEVRANDOM=${DEVRANDOM:-/dev/urandom}
 
 ## This will be formatted! It should be the path to the device, not a partition.
 DISK=$1
