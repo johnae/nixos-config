@@ -1,3 +1,5 @@
+# Deprecated. See [nixos-configuration](https://github.com/johnae/nixos-configuration) instead.
+
 ## NixOS setup
 
 This is my NixOS setup. It encrypts all disks including swap, uses compressed btrfs as fs.
